@@ -1,22 +1,24 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import User from "../Models/userModel";
 import Product from "../Models/productModel";
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
+	console.log("Creating a new user...");
 	try {
-		const { username, password } = req.body;
+		const { name, password } = req.body;
 		const hashedPassword = await bcrypt.hash(password, 10);
-		const user = new User({ username, password: hashedPassword });
+		const user = new User({ name, password: hashedPassword });
 		await user.save();
-		res.status(201).json(user);
+		res.status(200).json(user);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
+	console.log("Logging in...");
 	try {
 		const { name, password } = req.body;
 		const user = await User.findOne({ name });
@@ -30,66 +32,112 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
 		res.status(200).json({ message: "Login successful", user, token });
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
+	console.log("Creating a new product...");
 	try {
 		const product = new Product(req.body);
 		await product.save();
 		res.status(201).json(product);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
+	console.log("Getting all products...");
 	try {
 		const products = await Product.find();
 		res.status(200).json(products);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
 export const getProductById = async (req: Request, res: Response): Promise<void> => {
+	console.log("Getting product by id...");
 	try {
-		const product = await Product.findById(req.params.id);
+		// Try to get the id from the query parameters
+		const id = req.query.id as string;
+
+		if (!id) {
+			res.status(400).json({ error: "Product ID is missing" });
+			return;
+		}
+
+		console.log("id", id);
+		const product = await Product.findById(id);
 		if (!product) {
 			res.status(404).json({ error: "Product not found" });
 			return;
 		}
 		res.status(200).json(product);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
 export const updateProduct = async (req: Request, res: Response): Promise<void> => {
+	console.log("Updating product...");
 	try {
-		const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+		// Extract the product ID from the URL parameters
+		const id = req.query.id as string;
+
+		// Check if the product ID is provided
+		if (!id) {
+			res.status(400).json({ error: "Product ID is required" });
+			return;
+		}
+
+		// Use findByIdAndUpdate to update the product
+		const product = await Product.findByIdAndUpdate(id, req.body, {
 			new: true,
 		});
+
+		// Check if the product is found and updated
 		if (!product) {
 			res.status(404).json({ error: "Product not found" });
 			return;
 		}
+
 		res.status(200).json(product);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
 export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
+	console.log("Deleting product...");
 	try {
-		const product = await Product.findByIdAndDelete(req.params.id);
+		// Extract the product ID from the URL parameters
+		const id = req.query.id as string;
+
+		// Check if the product ID is provided
+		if (!id) {
+			res.status(400).json({ error: "Product ID is required" });
+			return;
+		}
+
+		const product = await Product.findByIdAndDelete(id);
+
 		if (!product) {
 			res.status(404).json({ error: "Product not found" });
 			return;
 		}
-		res.status(204).json();
+
+		const products = await Product.find();
+
+		res.status(200).json(products);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };

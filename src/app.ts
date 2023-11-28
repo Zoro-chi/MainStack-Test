@@ -1,5 +1,5 @@
 import express, { Request } from "express";
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 import mongoose, { ConnectOptions } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -10,7 +10,8 @@ dotenv.config();
 
 // Middleware
 app.use(cors<Request>());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json());
 
 // Routes
 app.use("/products", productRoutes);
