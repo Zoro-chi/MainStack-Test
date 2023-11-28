@@ -12,4 +12,6 @@ const productSchema: Schema = new Schema({
 	description: { type: String, required: true },
 });
 
-export default mongoose.model<IProduct>("Product", productSchema);
+const Product = mongoose.model<IProduct>("Product", productSchema);
+
+export default Product;
