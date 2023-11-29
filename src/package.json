@@ -28,8 +28,7 @@
 	},
 	"scripts": {
 		"start": "ts-node src/app.ts",
-		"test": "jest tests/product.test.ts --watch --detectOpenHandles",
-		"build": "esbuild src/app.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js"
+		"test": "jest tests/product.test.ts --watch --detectOpenHandles"
 	},
 	"jest": {
 		"preset": "ts-jest",
