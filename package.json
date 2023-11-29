@@ -27,7 +27,7 @@
 		"typescript": "^5.3.2"
 	},
 	"scripts": {
-		"start": "node src/app.ts",
+		"start": "npx ts-node src/app.ts",
 		"test": "jest tests/product.test.ts --watch --detectOpenHandles"
 	},
 	"jest": {
