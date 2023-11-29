@@ -1,16 +1,39 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../Models/userModel";
 import Product from "../Models/productModel";
+
+// export const createUser = async (req: Request, res: Response): Promise<void> => {
+// 	console.log("Creating a new user...");
+// 	try {
+// 		const { name, password } = req.body;
+// 		const hashedPassword = await bcrypt.hash(password, 10);
+// 		const user = new User({ name, password: hashedPassword });
+// 		await user.save();
+// 		res.status(201).json(user);
+// 	} catch (error) {
+// 		console.log(error);
+// 		res.status(500).json({ error: "Internal Server Error" });
+// 	}
+// };
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
 	console.log("Creating a new user...");
 	try {
 		const { name, password } = req.body;
+
+		// Check if a user with the same name already exists
+		const existingUser = await User.findOne({ name });
+
+		if (existingUser) {
+			res.status(400).json({ error: "User with the same name already exists" });
+			return;
+		}
+
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const user = new User({ name, password: hashedPassword });
 		await user.save();
-		res.status(200).json(user);
+		res.status(201).json(user);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
@@ -64,7 +87,7 @@ export const getProductById = async (req: Request, res: Response): Promise<void>
 	console.log("Getting product by id...");
 	try {
 		// Try to get the id from the query parameters
-		const id = req.query.id as string;
+		const id = (req.query.id as string) || (req.params.id as string);
 
 		if (!id) {
 			res.status(400).json({ error: "Product ID is missing" });
@@ -88,7 +111,7 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
 	console.log("Updating product...");
 	try {
 		// Extract the product ID from the URL parameters
-		const id = req.query.id as string;
+		const id = (req.query.id as string) || (req.params.id as string);
 
 		// Check if the product ID is provided
 		if (!id) {
@@ -118,7 +141,7 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 	console.log("Deleting product...");
 	try {
 		// Extract the product ID from the URL parameters
-		const id = req.query.id as string;
+		const id = (req.query.id as string) || (req.params.id as string);
 
 		// Check if the product ID is provided
 		if (!id) {
@@ -135,7 +158,20 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 
 		const products = await Product.find();
 
-		res.status(200).json(products);
+		res.status(204).json(products);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+	console.log("Deleting user...");
+	try {
+		const id = (req.query.id as string) || (req.params.id as string);
+		await User.deleteOne({ _id: id });
+
+		res.status(204).json({ message: "User deleted successfully" });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });

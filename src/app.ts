@@ -1,5 +1,5 @@
 import express, { Request } from "express";
-// import bodyParser from "body-parser";
+// import ServerlessHttp from "serverless-http";
 import mongoose, { ConnectOptions } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -33,5 +33,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
+
+// module.exports.handler = ServerlessHttp(app);
 
 export default app;
