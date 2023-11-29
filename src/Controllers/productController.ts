@@ -3,8 +3,16 @@ import bcrypt from "bcryptjs";
 import User from "../Models/userModel";
 import Product from "../Models/productModel";
 
+export const home = async (req: Request, res: Response): Promise<void> => {
+	try {
+		res.status(200).json({ message: "Welcome to the Mainstack Store API" });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
 export const createUser = async (req: Request, res: Response): Promise<void> => {
-	console.log("Creating a new user...");
 	try {
 		const { name, password } = req.body;
 
@@ -27,7 +35,6 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
-	console.log("Logging in...");
 	try {
 		const { name, password } = req.body;
 		const user = await User.findOne({ name });
@@ -47,7 +54,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
-	console.log("Creating a new product...");
 	try {
 		const product = new Product(req.body);
 		await product.save();
@@ -59,7 +65,6 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
 };
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
-	console.log("Getting all products...");
 	try {
 		const products = await Product.find();
 		res.status(200).json(products);
@@ -70,7 +75,6 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const getProductById = async (req: Request, res: Response): Promise<void> => {
-	console.log("Getting product by id...");
 	try {
 		// Try to get the id from the query parameters
 		const id = (req.query.id as string) || (req.params.id as string);
@@ -80,7 +84,6 @@ export const getProductById = async (req: Request, res: Response): Promise<void>
 			return;
 		}
 
-		console.log("id", id);
 		const product = await Product.findById(id);
 		if (!product) {
 			res.status(404).json({ error: "Product not found" });
@@ -94,7 +97,6 @@ export const getProductById = async (req: Request, res: Response): Promise<void>
 };
 
 export const updateProduct = async (req: Request, res: Response): Promise<void> => {
-	console.log("Updating product...");
 	try {
 		// Extract the product ID from the URL parameters
 		const id = (req.query.id as string) || (req.params.id as string);
@@ -124,7 +126,6 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
 };
 
 export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
-	console.log("Deleting product...");
 	try {
 		// Extract the product ID from the URL parameters
 		const id = (req.query.id as string) || (req.params.id as string);
@@ -152,7 +153,6 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 };
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-	console.log("Deleting user...");
 	try {
 		const id = (req.query.id as string) || (req.params.id as string);
 		await User.deleteOne({ _id: id });

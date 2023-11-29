@@ -13,15 +13,15 @@ app.use(cors<Request>());
 app.use(express.json());
 
 // Routes
-app.use("/products", productRoutes);
+app.use("/", productRoutes);
 
 // Database Connection
 const connectToDatabase = async () => {
 	try {
 		await mongoose.connect(process.env.MONGODB_URI!, {} as ConnectOptions);
-		console.log("Connected to Distribution API Database - Initial Connection");
+		console.log("Connected to Store API Database - Initial Connection");
 	} catch (err) {
-		console.log(`Initial Distribution API Database connection error occurred -`, err);
+		console.log(`Initial Store API Database connection error occurred -`, err);
 	}
 };
 

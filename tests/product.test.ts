@@ -7,10 +7,10 @@ describe("Product API", () => {
 	let userId: string;
 
 	// Create a test user before all tests
-	beforeAll(async () => {
+	test("should create a test user", async () => {
 		try {
 			const response = await request(app)
-				.post("/products/register")
+				.post("/register")
 				.send({ name: "TestUser", password: "testpassword" });
 
 			expect(response.status).toBe(201); // 201 Created
@@ -21,11 +21,23 @@ describe("Product API", () => {
 		}
 	});
 
+	// Test getting the home route
+	test("should get the home route", async () => {
+		try {
+			const response = await request(app).get("/");
+			expect(response.status).toBe(200);
+			expect(response.body.message).toBe("Welcome to the Mainstack Store API");
+		} catch (error) {
+			console.error("Error during home route test:", error);
+			throw error;
+		}
+	});
+
 	// Test creating a duplicate user
 	test("should not create a user with the same name", async () => {
 		try {
 			const response = await request(app)
-				.post("/products/register")
+				.post("/register")
 				.send({ name: "TestUser", password: "testpassword" });
 
 			expect(response.status).toBe(400);
@@ -40,7 +52,7 @@ describe("Product API", () => {
 	test("should login user", async () => {
 		try {
 			const response = await request(app)
-				.post("/products/login")
+				.post("/login")
 				.send({ name: "TestUser", password: "testpassword" });
 
 			expect(response.status).toBe(200);
@@ -57,7 +69,7 @@ describe("Product API", () => {
 	test("should create a new product", async () => {
 		try {
 			const response = await request(app)
-				.post("/products/new")
+				.post("/new")
 				.set("Authorization", `${authToken}`)
 				.send({
 					name: "Test Product",
@@ -79,7 +91,7 @@ describe("Product API", () => {
 	test("should get all products", async () => {
 		try {
 			const response = await request(app)
-				.get("/products/products")
+				.get("/products")
 				.set("Authorization", `${authToken}`);
 
 			expect(response.status).toBe(200);
@@ -94,7 +106,7 @@ describe("Product API", () => {
 	test("should get a product by id", async () => {
 		try {
 			const response = await request(app)
-				.get(`/products/single?id=${productId}`)
+				.get(`/single?id=${productId}`)
 				.set("Authorization", `${authToken}`);
 
 			expect(response.status).toBe(200);
@@ -140,7 +152,7 @@ describe("Product API", () => {
 
 			// Delete the test user
 			const deleteUserResponse = await request(app)
-				.delete(`/products/users?id=${userId}`)
+				.delete(`/users?id=${userId}`)
 				.set("Authorization", `${authToken}`);
 
 			expect(deleteUserResponse.status).toBe(204);

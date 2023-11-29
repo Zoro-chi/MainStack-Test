@@ -4,13 +4,14 @@ import * as productController from "../Controllers/productController";
 
 const router = express.Router();
 
+router.get("/", productController.home);
 router.post("/register", productController.createUser);
 router.post("/login", productController.loginUser);
-router.get("/products", authenticateToken, productController.getProducts);
-router.post("/new", authenticateToken, productController.createProduct);
-router.get("/single", authenticateToken, productController.getProductById);
-router.put("/", authenticateToken, productController.updateProduct);
-router.delete("/", authenticateToken, productController.deleteProduct);
-router.delete("/users/", authenticateToken, productController.deleteUser);
+router.get("/products", authenticateToken as any, productController.getProducts);
+router.post("/new", authenticateToken as any, productController.createProduct);
+router.get("/single", authenticateToken as any, productController.getProductById);
+router.put("/products", authenticateToken as any, productController.updateProduct);
+router.delete("/products", authenticateToken as any, productController.deleteProduct);
+router.delete("/users/", authenticateToken as any, productController.deleteUser);
 
 export default router;

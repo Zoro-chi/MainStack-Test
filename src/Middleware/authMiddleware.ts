@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 interface CustomRequest extends ExpressRequest {
-	user?: any; // Adjust the type according to your user object structure
+	user: any; // Adjust the type according to your user object structure
 }
 
 const authenticateToken = (
