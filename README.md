@@ -5,9 +5,11 @@
 Build a simple RESTful API to create and manage products in a store
 
 ## Authentication
+
 Implement token-based authentication
 
 ## Requirements
+
 1. Use NodeJS, Typescript, MongoDB and any other libraries of your choice
 2. All endpoints must be fully documented on Postman
 3. Code must be unit tested
@@ -21,7 +23,6 @@ Implement token-based authentication
 4. Error handling - Appropriate error codes and messages
 5. Security - Input validation and/or sanitization
 
-
 ## Submission
 
 Reply with the following:
@@ -29,4 +30,3 @@ Reply with the following:
 1. Link to Github repository
 2. Link to live API
 3. Link to Postman documentation
-
