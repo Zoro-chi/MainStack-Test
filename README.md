@@ -2,6 +2,10 @@
 
 # Backend Engineer Test
 
+## SIDE NOTE FROM DEV
+
+The Docker image for the API is hosted in a public AWS ECR: `public.ecr.aws/i2q3b5c0/mainstack-test`
+
 Build a simple RESTful API to create and manage products in a store
 
 ## Authentication

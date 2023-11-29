@@ -3,20 +3,6 @@ import bcrypt from "bcryptjs";
 import User from "../Models/userModel";
 import Product from "../Models/productModel";
 
-// export const createUser = async (req: Request, res: Response): Promise<void> => {
-// 	console.log("Creating a new user...");
-// 	try {
-// 		const { name, password } = req.body;
-// 		const hashedPassword = await bcrypt.hash(password, 10);
-// 		const user = new User({ name, password: hashedPassword });
-// 		await user.save();
-// 		res.status(201).json(user);
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).json({ error: "Internal Server Error" });
-// 	}
-// };
-
 export const createUser = async (req: Request, res: Response): Promise<void> => {
 	console.log("Creating a new user...");
 	try {
